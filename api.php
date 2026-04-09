@@ -9,16 +9,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 	sendJson(['ok' => true, 'message' => 'Preflight OK']);
 }
 
+function hasColumn(PDO $pdo, string $table, string $column): bool
+{
+	static $cache = [];
+	$key = $table . '.' . $column;
+	if (isset($cache[$key])) {
+		return $cache[$key];
+	}
+
+	$stmt = $pdo->prepare("SHOW COLUMNS FROM {$table} LIKE ?");
+	$stmt->execute([$column]);
+	$cache[$key] = (bool)$stmt->fetch();
+	return $cache[$key];
+}
+
 try {
 	$pdo = getPDO();
 	$action = $_GET['action'] ?? '';
 	$input = getJsonInput();
+	$partsHasActive = hasColumn($pdo, 'pc_parts', 'is_active');
+	$buildsHasActive = hasColumn($pdo, 'pc_builds', 'is_active');
 
 	// ===== GUEST & CUSTOMER ENDPOINTS =====
 
 	// List all PC parts
 	if ($action === 'list_parts') {
-		$stmt = $pdo->query('SELECT id, name, category, brand, model, price, stock, is_stock_empty, specifications FROM pc_parts WHERE is_active = 1 ORDER BY category, name ASC');
+		$sql = 'SELECT id, name, category, brand, model, price, stock, is_stock_empty, specifications FROM pc_parts';
+		if ($partsHasActive) {
+			$sql .= ' WHERE is_active = 1';
+		}
+		$sql .= ' ORDER BY category, name ASC';
+		$stmt = $pdo->query($sql);
 		$parts = $stmt->fetchAll();
 		$parts = array_map(function($p) {
 			$p['specifications'] = $p['specifications'] ? json_decode($p['specifications'], true) : [];
@@ -29,7 +50,12 @@ try {
 
 	// List all PC builds with components
 	if ($action === 'list_builds') {
-		$stmt = $pdo->query('SELECT id, name, description, total_price, is_active FROM pc_builds WHERE is_active = 1 ORDER BY name ASC');
+		$sql = 'SELECT id, name, description, total_price FROM pc_builds';
+		if ($buildsHasActive) {
+			$sql .= ' WHERE is_active = 1';
+		}
+		$sql .= ' ORDER BY name ASC';
+		$stmt = $pdo->query($sql);
 		$builds = $stmt->fetchAll();
 		sendJson(['ok' => true, 'data' => $builds]);
 	}
@@ -39,7 +65,12 @@ try {
 		$buildId = (int)($_GET['id'] ?? 0);
 		if ($buildId <= 0) sendJson(['ok' => false, 'message' => 'Build ID harus valid'], 422);
 
-		$stmt = $pdo->prepare('SELECT id, name, description, total_price FROM pc_builds WHERE id = ? AND is_active = 1 LIMIT 1');
+		$sql = 'SELECT id, name, description, total_price FROM pc_builds WHERE id = ?';
+		if ($buildsHasActive) {
+			$sql .= ' AND is_active = 1';
+		}
+		$sql .= ' LIMIT 1';
+		$stmt = $pdo->prepare($sql);
 		$stmt->execute([$buildId]);
 		$build = $stmt->fetch();
 		if (!$build) sendJson(['ok' => false, 'message' => 'Build tidak ditemukan'], 404);
@@ -62,12 +93,17 @@ try {
 		if (strlen($q) < 2) sendJson(['ok' => true, 'data' => []]);
 
 		$q = '%' . $q . '%';
-		$stmt = $pdo->prepare('
+		$sql = '
 			SELECT id, name, category, brand, model, price, stock, is_stock_empty
 			FROM pc_parts
-			WHERE is_active = 1 AND (name LIKE ? OR brand LIKE ? OR category LIKE ? OR model LIKE ?)
+			WHERE (name LIKE ? OR brand LIKE ? OR category LIKE ? OR model LIKE ?)';
+		if ($partsHasActive) {
+			$sql .= ' AND is_active = 1';
+		}
+		$sql .= '
 			ORDER BY category, name ASC
-		');
+		';
+		$stmt = $pdo->prepare($sql);
 		$stmt->execute([$q, $q, $q, $q]);
 		sendJson(['ok' => true, 'data' => $stmt->fetchAll()]);
 	}
@@ -78,7 +114,12 @@ try {
 		if (!$prompt) sendJson(['ok' => false, 'message' => 'Prompt wajib diisi'], 422);
 
 		// For now, return all parts as recommendation
-		$stmt = $pdo->query('SELECT id, name, category, price FROM pc_parts WHERE is_active = 1 LIMIT 10');
+		$sql = 'SELECT id, name, category, price FROM pc_parts';
+		if ($partsHasActive) {
+			$sql .= ' WHERE is_active = 1';
+		}
+		$sql .= ' LIMIT 10';
+		$stmt = $pdo->query($sql);
 		$parts = $stmt->fetchAll();
 		sendJson(['ok' => true, 'data' => ['parts' => $parts, 'reason' => 'Rekomendasi AI: ' . substr($prompt, 0, 50)]]);
 	}
@@ -98,11 +139,19 @@ try {
 
 		// Check if item exists
 		if ($itemType === 'part') {
-			$check = $pdo->prepare('SELECT id FROM pc_parts WHERE id = ? AND is_active = 1');
+			$sql = 'SELECT id FROM pc_parts WHERE id = ?';
+			if ($partsHasActive) {
+				$sql .= ' AND is_active = 1';
+			}
+			$check = $pdo->prepare($sql);
 			$check->execute([$itemId]);
 			if (!$check->fetch()) sendJson(['ok' => false, 'message' => 'Part tidak ditemukan'], 404);
 		} else {
-			$check = $pdo->prepare('SELECT id FROM pc_builds WHERE id = ? AND is_active = 1');
+			$sql = 'SELECT id FROM pc_builds WHERE id = ?';
+			if ($buildsHasActive) {
+				$sql .= ' AND is_active = 1';
+			}
+			$check = $pdo->prepare($sql);
 			$check->execute([$itemId]);
 			if (!$check->fetch()) sendJson(['ok' => false, 'message' => 'Build tidak ditemukan'], 404);
 		}
@@ -273,10 +322,17 @@ try {
 			sendJson(['ok' => false, 'message' => 'Data part belum lengkap'], 422);
 		}
 
-		$stmt = $pdo->prepare('
-			INSERT INTO pc_parts (name, category, brand, model, price, stock, is_stock_empty, is_active, created_at)
-			VALUES (?, ?, ?, ?, ?, ?, ?, 1, NOW())
-		');
+		if ($partsHasActive) {
+			$stmt = $pdo->prepare('
+				INSERT INTO pc_parts (name, category, brand, model, price, stock, is_stock_empty, is_active, created_at)
+				VALUES (?, ?, ?, ?, ?, ?, ?, 1, NOW())
+			');
+		} else {
+			$stmt = $pdo->prepare('
+				INSERT INTO pc_parts (name, category, brand, model, price, stock, is_stock_empty, created_at)
+				VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+			');
+		}
 		$isStockEmpty = $stock === 0 ? 1 : 0;
 		$stmt->execute([$name, $category, $brand, $model, $price, $stock, $isStockEmpty]);
 
@@ -341,10 +397,17 @@ try {
 			sendJson(['ok' => false, 'message' => 'Nama dan harga build wajib diisi'], 422);
 		}
 
-		$stmt = $pdo->prepare('
-			INSERT INTO pc_builds (name, description, total_price, is_active, created_at)
-			VALUES (?, ?, ?, 1, NOW())
-		');
+		if ($buildsHasActive) {
+			$stmt = $pdo->prepare('
+				INSERT INTO pc_builds (name, description, total_price, is_active, created_at)
+				VALUES (?, ?, ?, 1, NOW())
+			');
+		} else {
+			$stmt = $pdo->prepare('
+				INSERT INTO pc_builds (name, description, total_price, created_at)
+				VALUES (?, ?, ?, NOW())
+			');
+		}
 		$stmt->execute([$name, $description, $totalPrice]);
 
 		sendJson(['ok' => true, 'message' => 'PC Build berhasil ditambahkan', 'data' => [

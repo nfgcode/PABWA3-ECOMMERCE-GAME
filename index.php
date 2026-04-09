@@ -6,20 +6,20 @@
   <title>PC & AI Agent E-Commerce Store</title>
   <style>
     :root {
-      --primary: #0f172e;
-      --secondary: #1a2f4f;
-      --accent: #00d4ff;
-      --accent-alt: #ff6b35;
+      --primary: #ffffff;
+      --secondary: #f9fafb;
+      --accent: #03ac0e;
+      --accent-alt: #029a0b;
       --success: #2ecc71;
       --danger: #e74c3c;
       --warning: #f39c12;
-      --bg: #0a0e27;
-      --paper: #121b3f;
-      --border: #1e3a5f;
-      --text: #e0e7ff;
-      --muted: #94a3b8;
-      --shadow: 0 16px 48px rgba(0, 20, 50, 0.5);
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --bg: #f3f4f5;
+      --paper: #ffffff;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+      --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06);
       --radius: 12px;
     }
 
@@ -37,7 +37,7 @@
     }
 
     .navbar {
-      background: var(--primary);
+      background: #ffffff;
       border-bottom: 1px solid var(--border);
       padding: 16px 20px;
       display: flex;
@@ -47,6 +47,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      gap: 16px;
     }
 
     .navbar-brand {
@@ -56,6 +57,23 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
+    }
+
+    .navbar-center {
+      flex: 1;
+      max-width: 700px;
+      position: relative;
+    }
+
+    .navbar-center input {
+      width: 100%;
+      margin: 0;
+      border-radius: 999px;
+      padding: 11px 16px;
+      background: #f8fafc;
+      border: 1px solid #d1d5db;
+      color: #111827;
     }
 
     .navbar-menu {
@@ -80,20 +98,20 @@
     .nav-link:hover,
     .nav-link.active {
       color: var(--accent);
-      background: rgba(0, 212, 255, 0.1);
+      background: rgba(3, 172, 14, 0.1);
     }
 
     .hero {
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+      background: linear-gradient(180deg, #ffffff 0%, #f4fbf4 100%);
       border-bottom: 1px solid var(--border);
-      padding: 60px 20px;
+      padding: 34px 20px;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 24px;
     }
 
     .hero h1 {
       margin: 0 0 12px;
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       color: var(--accent);
       font-weight: 900;
     }
@@ -145,8 +163,8 @@
     }
 
     .card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+      border-color: #bbf7d0;
+      box-shadow: 0 10px 24px rgba(3, 172, 14, 0.14);
     }
 
     .card-title {
@@ -168,14 +186,14 @@
       right: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(3, 172, 14, 0.08) 0%, transparent 70%);
       z-index: -1;
     }
 
     .product-image {
       width: 100%;
-      height: 200px;
-      background: var(--secondary);
+      height: 180px;
+      background: linear-gradient(180deg, #f9fafb, #f3f4f6);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -231,11 +249,11 @@
 
     .btn-primary {
       background: var(--accent);
-      color: var(--primary);
+      color: #ffffff;
     }
 
     .btn-secondary {
-      background: var(--secondary);
+      background: #ffffff;
       color: var(--accent);
       border: 1px solid var(--accent);
     }
@@ -500,6 +518,11 @@
         font-size: 1.1rem;
       }
 
+      .navbar-center {
+        width: 100%;
+        max-width: none;
+      }
+
       .navbar-menu {
         flex-direction: column;
         gap: 8px;
@@ -552,7 +575,7 @@
 
     .tab-button.active {
       background: var(--accent);
-      color: var(--primary);
+      color: #ffffff;
       border-color: var(--accent);
     }
 
@@ -577,6 +600,9 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-brand">💻 PC Store AI</div>
+    <div class="navbar-center">
+      <input type="text" placeholder="Cari motherboard, GPU, SSD, atau build PC..." />
+    </div>
     <div class="navbar-menu">
       <button class="nav-link active" data-page="guest">Guest</button>
       <button class="nav-link" data-page="customer">Customer</button>
@@ -605,6 +631,7 @@
               <button class="btn btn-secondary" id="guestFilterParts">🔍 Cari Parts</button>
             </div>
             <div id="guestStatus" class="status-message info" style="display: none;"></div>
+            <div id="guestAiOutput" class="chat-box" style="display: none; margin-top: 12px;"></div>
           </div>
 
           <div class="card">
@@ -956,6 +983,136 @@
       `).join('');
     }
 
+    function extractBudget(prompt) {
+      const p = String(prompt || '').toLowerCase();
+      const juta = p.match(/(\d+(?:[\.,]\d+)?)\s*(jt|juta)/i);
+      if (juta) {
+        return Math.round(parseFloat(juta[1].replace(',', '.')) * 1000000);
+      }
+      const rupiah = p.match(/(\d{6,12})/);
+      if (rupiah) {
+        return Number(rupiah[1]);
+      }
+      return null;
+    }
+
+    function scoreItemByPrompt(item, prompt) {
+      const text = `${item.name || ''} ${item.brand || ''} ${item.model || ''} ${item.category || ''}`.toLowerCase();
+      const tokens = String(prompt || '').toLowerCase().split(/\s+/).filter(Boolean);
+      let score = 0;
+      tokens.forEach(t => {
+        if (t.length > 2 && text.includes(t)) score += 2;
+      });
+
+      if (text.includes('rtx') && /(gaming|game|fps|2k|1440|4k)/i.test(prompt)) score += 3;
+      if (text.includes('processor') && /(render|editing|stream|produktif|kerja)/i.test(prompt)) score += 2;
+      if (text.includes('memory') && /(multitask|editing|3d|desain)/i.test(prompt)) score += 2;
+      return score;
+    }
+
+    function renderGuestAiOutput(prompt, recParts, recBuilds, budget) {
+      const box = document.getElementById('guestAiOutput');
+      if (!box) return;
+
+      const budgetText = budget ? `Budget terdeteksi: <strong>${rupiah(budget)}</strong>.` : 'Budget tidak terdeteksi, menampilkan rekomendasi umum terbaik.';
+      const partsHtml = recParts.length
+        ? `<ul style="margin: 6px 0 0; padding-left: 18px;">${recParts.map(p => `<li>${p.name} (${p.brand}) - <strong>${rupiah(p.price)}</strong></li>`).join('')}</ul>`
+        : '<p style="margin: 6px 0 0; color: var(--muted);">Belum ada part yang cocok.</p>';
+      const buildsHtml = recBuilds.length
+        ? `<ul style="margin: 6px 0 0; padding-left: 18px;">${recBuilds.map(b => `<li>${b.name} - <strong>${rupiah(b.total_price)}</strong></li>`).join('')}</ul>`
+        : '<p style="margin: 6px 0 0; color: var(--muted);">Belum ada build yang cocok.</p>';
+
+      box.innerHTML = `
+        <div class="chat-message user">${prompt.replace(/</g, '&lt;')}</div>
+        <div class="chat-message ai">
+          <div><strong>Saran AI:</strong> ${budgetText}</div>
+          <div style="margin-top: 8px;"><strong>Produk yang direkomendasikan:</strong>${partsHtml}</div>
+          <div style="margin-top: 8px;"><strong>Build alternatif:</strong>${buildsHtml}</div>
+          <div style="margin-top: 8px; color: var(--muted);">Tips: kombinasi ideal biasanya Processor + GPU + RAM 32GB + SSD NVMe agar performa stabil.</div>
+        </div>
+      `;
+      box.style.display = 'block';
+    }
+
+    function runGuestAiRecommendation() {
+      const promptEl = document.getElementById('guestPrompt');
+      const prompt = (promptEl?.value || '').trim();
+      if (!prompt) {
+        showStatus('Isi dulu kebutuhan Anda agar AI bisa memberi saran.', 'error');
+        return;
+      }
+
+      const budget = extractBudget(prompt);
+      let parts = [...state.parts].filter(p => !p.is_stock_empty);
+      if (budget) {
+        parts = parts.filter(p => Number(p.price) <= budget);
+      }
+
+      parts.sort((a, b) => scoreItemByPrompt(b, prompt) - scoreItemByPrompt(a, prompt));
+      const recommendedParts = parts.slice(0, 5);
+
+      let builds = [...state.builds];
+      if (budget) {
+        builds = builds.filter(b => Number(b.total_price) <= budget * 1.1);
+      }
+      builds.sort((a, b) => Math.abs((budget || a.total_price) - a.total_price) - Math.abs((budget || b.total_price) - b.total_price));
+      const recommendedBuilds = builds.slice(0, 2);
+
+      renderGuestAiOutput(prompt, recommendedParts, recommendedBuilds, budget);
+      showStatus('Rekomendasi sudah dibuat dari katalog produk kita.', 'success');
+    }
+
+    function applyGuestFilter() {
+      const keyword = (document.getElementById('guestSearchParts')?.value || '').trim().toLowerCase();
+      const category = (document.getElementById('guestCategoryFilter')?.value || '').trim();
+
+      let filtered = [...state.parts];
+      if (keyword) {
+        filtered = filtered.filter(p => `${p.name} ${p.brand} ${p.model}`.toLowerCase().includes(keyword));
+      }
+      if (category) {
+        filtered = filtered.filter(p => p.category === category);
+      }
+
+      const wrap = document.getElementById('guestPartsList');
+      if (!filtered.length) {
+        wrap.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔎</div><p>Produk tidak ditemukan</p></div>';
+        showStatus('Tidak ada produk sesuai filter.', 'info');
+        return;
+      }
+
+      wrap.innerHTML = filtered.map(p => `
+        <div class="card product-card">
+          <div class="product-image">🔧</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-spec">${p.brand} ${p.model}</div>
+          <div class="badge badge-primary">${p.category}</div>
+          <div class="product-price">${rupiah(p.price)}</div>
+          <div class="product-stock ${p.is_stock_empty ? 'out-of-stock' : ''}">
+            ${p.is_stock_empty ? '❌ Stok Habis' : '✅ Tersedia (' + p.stock + ')'}
+          </div>
+        </div>
+      `).join('');
+
+      showStatus(`Menampilkan ${filtered.length} produk hasil filter.`, 'success');
+    }
+
+    function initGuestActions() {
+      const askBtn = document.getElementById('guestAskAI');
+      const filterBtn = document.getElementById('guestFilterParts');
+      const promptEl = document.getElementById('guestPrompt');
+
+      if (askBtn) askBtn.addEventListener('click', runGuestAiRecommendation);
+      if (filterBtn) filterBtn.addEventListener('click', applyGuestFilter);
+      if (promptEl) {
+        promptEl.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            runGuestAiRecommendation();
+          }
+        });
+      }
+    }
+
     async function loadCustomerData() {
       try {
         const partsRes = await request('list_parts');
@@ -1192,6 +1349,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       initTabs();
       initNavigation();
+      initGuestActions();
       loadGuestData();
     });
   </script>
