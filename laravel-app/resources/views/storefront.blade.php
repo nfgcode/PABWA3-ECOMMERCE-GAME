@@ -127,7 +127,7 @@
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 20px 40px;
+      padding: 0 16px 28px;
     }
 
     .page {
@@ -156,7 +156,7 @@
       background: var(--paper);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 16px;
       box-shadow: var(--shadow-sm);
       transition: 0.3s;
       animation: slideUp 0.4s ease;
@@ -579,6 +579,382 @@
       border-color: var(--accent);
     }
 
+    .utility-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 20px;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .utility-left,
+    .utility-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .utility-left a {
+      color: #e2e8f0;
+      text-decoration: none;
+    }
+
+    body.admin-mode .utility-bar,
+    body.admin-mode .navbar {
+      display: none;
+    }
+
+    body.admin-mode .hero {
+      display: none;
+    }
+
+    body.admin-mode .container {
+      max-width: 1240px;
+      padding-top: 24px;
+    }
+
+    #admin > .card {
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    #admin .tabs {
+      margin-bottom: 16px;
+    }
+
+    #admin .tab-content .grid {
+      align-items: start;
+    }
+
+    .navbar-brand span {
+      color: #111827;
+    }
+
+    .hero {
+      padding: 16px 20px 24px;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    .hero-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 14px;
+    }
+
+    .hero-primary-card,
+    .hero-side-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      background: #f3f4f6;
+      position: relative;
+    }
+
+    .hero-primary-card {
+      min-height: 360px;
+    }
+
+    .hero-side-stack {
+      display: grid;
+      gap: 14px;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .hero-side-card {
+      min-height: 173px;
+    }
+
+    .display-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .fallback-display {
+      background: linear-gradient(130deg, #fee2e2, #fef3c7 55%, #fecaca);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      left: 22px;
+      bottom: 22px;
+      text-align: left;
+      max-width: 540px;
+    }
+
+    .hero-overlay h1 {
+      margin: 0;
+      color: #fef08a;
+      font-size: 3rem;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 14px rgba(127, 29, 29, 0.55);
+    }
+
+    .hero-overlay p {
+      margin: 10px 0 0;
+      color: #fff7ed;
+      font-size: 1rem;
+      text-shadow: 0 2px 10px rgba(17, 24, 39, 0.55);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: #111827;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+    }
+
+    .section-card {
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e7eb;
+      padding: 14px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .service-strip {
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .service-item {
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.88rem;
+    }
+
+    .service-item strong {
+      color: #1e293b;
+      font-size: 0.92rem;
+    }
+
+    .service-item span {
+      color: #64748b;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .category-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      background: #ffffff;
+      min-height: 96px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-item img {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+    }
+
+    .category-item span {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .promo-grid {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr) 210px;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .promo-banner {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #fde68a;
+      background: linear-gradient(150deg, #facc15, #f87171);
+      position: relative;
+      min-height: 220px;
+    }
+
+    .promo-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .promo-banner-text {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      font-size: 1.45rem;
+      font-weight: 900;
+      line-height: 1.05;
+      color: #b91c1c;
+      text-shadow: 0 1px 6px rgba(255, 255, 255, 0.55);
+    }
+
+    .storefront-grid {
+      margin-bottom: 0;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    }
+
+    .storefront-grid .product-card {
+      padding: 14px;
+    }
+
+    .storefront-grid .product-image {
+      height: 128px;
+      margin-bottom: 10px;
+      font-size: 2rem;
+      overflow: hidden;
+    }
+
+    .storefront-grid .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .see-all-card {
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    #guest .grid {
+      align-items: start;
+      gap: 14px;
+    }
+
+    #guest .col-8.stack,
+    #guest .col-3.stack {
+      gap: 12px;
+    }
+
+    .see-all-card h3 {
+      margin: 0;
+      color: #0f172a;
+      font-size: 1.1rem;
+    }
+
+    .see-all-card p {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .see-all-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fb7185, #f43f5e);
+    }
+
+    .compact-search {
+      margin-bottom: 0;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+      }
+
+      .service-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .promo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 0 10px 18px;
+      }
+
+      .card {
+        padding: 12px;
+      }
+
+      .utility-bar {
+        display: none;
+      }
+
+      body.admin-mode .container {
+        padding: 14px 12px 24px;
+      }
+
+      #admin > .card {
+        padding: 14px;
+      }
+
+      .hero-overlay h1 {
+        font-size: 2rem;
+      }
+
+      .hero-primary-card {
+        min-height: 280px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .service-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -597,11 +973,25 @@
   </style>
 </head>
 <body>
+  <div class="utility-bar">
+    <div class="utility-left">
+      <a href="#">Menu</a>
+      <a href="#">Katalog</a>
+      <a href="#">Artikel</a>
+      <a href="#">Lokasi Toko</a>
+      <a href="#">Kontak</a>
+    </div>
+    <div class="utility-right">
+      <span>0812-9700-9800</span>
+      <span>sales@buildpc.id</span>
+    </div>
+  </div>
+
   <!-- Navbar -->
   <nav class="navbar">
-    <div class="navbar-brand">💻 PC Store AI</div>
+    <div class="navbar-brand">BUILDPC.ID</div>
     <div class="navbar-center">
-      <input type="text" placeholder="Cari motherboard, GPU, SSD, atau build PC..." />
+      <input type="text" placeholder="Cari produk, kategori, atau brand..." />
     </div>
     <div class="navbar-menu">
       <button class="nav-link active" data-page="guest">Guest</button>
@@ -612,55 +1002,111 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <h1>PC & AI Agent E-Commerce Store</h1>
-    <p>Temukan komponen PC impian Anda dengan rekomendasi dari AI Assistant. Rakit PC custom sesuai budget dan kebutuhan Anda.</p>
+    <div class="hero-grid">
+      <div class="hero-primary-card">
+        <img src="assets/images/display/hero-main.jpg" alt="Promo utama" class="display-image" onerror="this.style.display='none'; this.parentElement.classList.add('fallback-display')" />
+        <div class="hero-overlay">
+          <div class="hero-badge">PERIODE 1 - 20 APRIL 2026</div>
+          <h1>BUILD SALE</h1>
+          <p>Gratis headset gaming untuk pembelian rakitan PC, plus diskon spesial sampai 4%.</p>
+        </div>
+      </div>
+      <div class="hero-side-stack">
+        <div class="hero-side-card">
+          <img src="assets/images/display/hero-side-1.jpg" alt="Promo samping 1" class="display-image" onerror="this.style.display='none'; this.parentElement.classList.add('fallback-display')" />
+        </div>
+        <div class="hero-side-card">
+          <img src="assets/images/display/hero-side-2.jpg" alt="Promo samping 2" class="display-image" onerror="this.style.display='none'; this.parentElement.classList.add('fallback-display')" />
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Main Container -->
   <div class="container">
     <!-- GUEST PAGE -->
     <div class="page active" id="guest">
+      <div class="service-strip card">
+        <div class="service-item"><strong>AgresCare</strong><span>Jaminan servis resmi</span></div>
+        <div class="service-item"><strong>5 Hari Rusak</strong><span>Tukar baru</span></div>
+        <div class="service-item"><strong>Cicilan 0%</strong><span>Hingga 12 bulan</span></div>
+        <div class="service-item"><strong>Pasti Ada Promo</strong><span>Diskon & cashback</span></div>
+      </div>
+
+      <div class="card section-card">
+        <div class="section-head">
+          <h2 class="card-title">Kategori Produk</h2>
+          <button class="btn btn-secondary btn-small" id="guestFilterParts">Filter Produk</button>
+        </div>
+        <div class="category-grid" id="categoryGrid">
+          <div class="category-item"><img src="assets/images/objects/categories/phone-tablet.png" alt="Phone & Tablet" onerror="this.style.display='none'" /><span>Phone & Tablet</span></div>
+          <div class="category-item"><img src="assets/images/objects/categories/laptop.png" alt="Laptop" onerror="this.style.display='none'" /><span>Laptop</span></div>
+          <div class="category-item"><img src="assets/images/objects/categories/pc-aio.png" alt="PC & AIO" onerror="this.style.display='none'" /><span>PC & AIO</span></div>
+          <div class="category-item"><img src="assets/images/objects/categories/smartwatch.png" alt="Smartwatch" onerror="this.style.display='none'" /><span>Smartwatch</span></div>
+          <div class="category-item"><img src="assets/images/objects/categories/printer.png" alt="Printer & Scanner" onerror="this.style.display='none'" /><span>Printer</span></div>
+          <div class="category-item"><img src="assets/images/objects/categories/console.png" alt="Console" onerror="this.style.display='none'" /><span>Console</span></div>
+          <div class="category-item"><img src="assets/images/objects/categories/network.png" alt="Network" onerror="this.style.display='none'" /><span>Network</span></div>
+          <div class="category-item"><img src="assets/images/objects/categories/tv.png" alt="TV" onerror="this.style.display='none'" /><span>TV</span></div>
+        </div>
+      </div>
+
+      <div class="card section-card">
+        <div class="section-head">
+          <h2 class="card-title">Promo Minggu Ini</h2>
+          <button class="btn btn-secondary btn-small" onclick="switchPage('customer')">Lihat Semua</button>
+        </div>
+        <div class="promo-grid">
+          <div class="promo-banner">
+            <img src="assets/images/display/weekly-deal.jpg" alt="Weekly deal" onerror="this.style.display='none'; this.parentElement.classList.add('fallback-display')" />
+            <div class="promo-banner-text">WEEKLY DEALS<br>GRATIS TWS</div>
+          </div>
+          <div id="guestPartsList" class="product-grid storefront-grid"></div>
+          <div class="see-all-card">
+            <div class="see-all-dot"></div>
+            <h3>Lihat Semua</h3>
+            <p>Jelajahi produk promo lainnya.</p>
+            <button class="btn btn-primary btn-small" onclick="switchPage('customer')">Lihat Semua</button>
+          </div>
+        </div>
+      </div>
+
       <div class="grid">
-        <div class="col-9 stack">
-          <div class="card">
-            <h2 class="card-title">🤖 AI Recommendation Assistant</h2>
-            <p style="color: var(--muted); margin-bottom: 16px;">Ceritakan kebutuhan Anda, dan AI akan merekomendasikan PC build yang sempurna untuk Anda.</p>
-            <textarea id="guestPrompt" placeholder="Contoh: Saya butuh PC untuk gaming 4K, budget 50 juta, mau RTX 4090 sama Intel Core i9..."></textarea>
+        <div class="col-8 stack">
+          <div class="card section-card">
+            <h2 class="card-title">AI Recommendation Assistant</h2>
+            <p style="color: var(--muted); margin-bottom: 16px;">Ceritakan kebutuhan Anda, dan AI akan merekomendasikan build serta parts terbaik.</p>
+            <textarea id="guestPrompt" placeholder="Contoh: Saya butuh laptop gaming 2K budget 20 juta untuk editing dan streaming."></textarea>
             <div class="row">
-              <button class="btn btn-primary" id="guestAskAI">💬 Tanya AI</button>
-              <button class="btn btn-secondary" id="guestFilterParts">🔍 Cari Parts</button>
+              <button class="btn btn-primary" id="guestAskAI">Tanya AI</button>
             </div>
             <div id="guestStatus" class="status-message info" style="display: none;"></div>
             <div id="guestAiOutput" class="chat-box" style="display: none; margin-top: 12px;"></div>
           </div>
 
-          <div class="card">
-            <h2 class="card-title">🖥️ Katalog PC Parts</h2>
-            <div class="search-box">
-              <input type="text" id="guestSearchParts" placeholder="Cari komponen...">
-              <select id="guestCategoryFilter" style="margin-bottom: 0;">
-                <option value="">Semua Kategori</option>
-                <option value="Processor">Processor</option>
-                <option value="Graphics Card">Graphics Card</option>
-                <option value="Memory">Memory</option>
-                <option value="Storage">Storage</option>
-                <option value="Motherboard">Motherboard</option>
-                <option value="Power Supply">Power Supply</option>
-                <option value="Case">Case</option>
-              </select>
+          <div class="card section-card">
+            <div class="section-head">
+              <h2 class="card-title">PC Build Packages</h2>
+              <div class="search-box compact-search">
+                <input type="text" id="guestSearchParts" placeholder="Cari komponen...">
+                <select id="guestCategoryFilter" style="margin-bottom: 0;">
+                  <option value="">Semua Kategori</option>
+                  <option value="Processor">Processor</option>
+                  <option value="Graphics Card">Graphics Card</option>
+                  <option value="Memory">Memory</option>
+                  <option value="Storage">Storage</option>
+                  <option value="Motherboard">Motherboard</option>
+                  <option value="Power Supply">Power Supply</option>
+                  <option value="Case">Case</option>
+                </select>
+              </div>
             </div>
-            <div id="guestPartsList" class="product-grid"></div>
-          </div>
-
-          <div class="card">
-            <h2 class="card-title">⚙️ PC Build Packages</h2>
-            <div id="guestBuildsList" class="product-grid"></div>
+            <div id="guestBuildsList" class="product-grid storefront-grid"></div>
           </div>
         </div>
 
         <div class="col-3 stack">
-          <div class="card">
-            <h2 class="card-title">📊 Statistik</h2>
+          <div class="card section-card">
+            <h2 class="card-title">Statistik</h2>
             <div style="padding: 12px; background: var(--secondary); border-radius: 8px; margin-bottom: 12px;">
               <div style="font-size: 0.9rem; color: var(--muted);">Total Parts</div>
               <div style="font-size: 1.8rem; color: var(--accent); font-weight: 700;" id="guestTotalParts">0</div>
@@ -671,14 +1117,14 @@
             </div>
           </div>
 
-          <div class="card">
-            <h2 class="card-title">🚀 Langkah Berikutnya</h2>
+          <div class="card section-card">
+            <h2 class="card-title">Langkah Berikutnya</h2>
             <p style="font-size: 0.95rem; color: var(--muted); margin-bottom: 16px;">Siap untuk membeli? Daftar atau login sebagai customer untuk mulai berbelanja.</p>
             <button class="btn btn-primary btn-block" onclick="switchPage('customer')">Buka Customer Dashboard</button>
           </div>
 
-          <div class="card">
-            <h2 class="card-title">💡 Tips</h2>
+          <div class="card section-card">
+            <h2 class="card-title">Tips</h2>
             <ul style="color: var(--muted); font-size: 0.9rem; margin: 0; padding-left: 20px;">
               <li>Gunakan AI Assistant untuk rekomendasi personal</li>
               <li>Filter parts berdasarkan kategori</li>
@@ -879,7 +1325,7 @@
   </div>
 
   <script>
-    const API = './api.php';
+    const API = './legacy-api.php';
     const rupiah = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(n || 0));
 
     const state = {
@@ -891,6 +1337,23 @@
       orders: [],
       customers: [],
     };
+
+    function slugify(text) {
+      return String(text || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function getPartImage(part) {
+      if (part.image_url) return part.image_url;
+      return `assets/images/objects/products/${slugify(part.name)}.jpg`;
+    }
+
+    function getBuildImage(build) {
+      if (build.image_url) return build.image_url;
+      return `assets/images/objects/builds/${slugify(build.name)}.jpg`;
+    }
 
     async function request(action, method = 'GET', body = null, params = null) {
       try {
@@ -912,6 +1375,7 @@
       document.getElementById(page).classList.add('active');
       document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
       document.querySelector(`[data-page="${page}"]`).classList.add('active');
+      document.body.classList.toggle('admin-mode', page === 'admin');
       state.currentPage = page;
 
       if (page === 'guest') loadGuestData();
@@ -937,8 +1401,10 @@
         state.builds = buildsRes.data || [];
         renderGuestParts();
         renderGuestBuilds();
-        document.getElementById('guestTotalParts').textContent = state.parts.length;
-        document.getElementById('guestTotalBuilds').textContent = state.builds.length;
+        const totalPartsEl = document.getElementById('guestTotalParts');
+        const totalBuildsEl = document.getElementById('guestTotalBuilds');
+        if (totalPartsEl) totalPartsEl.textContent = state.parts.length;
+        if (totalBuildsEl) totalBuildsEl.textContent = state.builds.length;
       } catch (err) {
         showStatus('Error: ' + err.message, 'error');
       }
@@ -950,9 +1416,11 @@
         wrap.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Belum ada parts tersedia</p></div>';
         return;
       }
-      wrap.innerHTML = state.parts.map(p => `
+      wrap.innerHTML = state.parts.slice(0, 4).map(p => `
         <div class="card product-card">
-          <div class="product-image">🔧</div>
+          <div class="product-image">
+            <img src="${getPartImage(p)}" alt="${p.name}" onerror="this.style.display='none'; this.parentElement.textContent='🔧'; this.parentElement.style.fontSize='2rem';" />
+          </div>
           <div class="product-name">${p.name}</div>
           <div class="product-spec">${p.brand} ${p.model}</div>
           <div class="badge badge-primary">${p.category}</div>
@@ -973,7 +1441,9 @@
       }
       wrap.innerHTML = state.builds.map(b => `
         <div class="card product-card">
-          <div class="product-image">⚙️</div>
+          <div class="product-image">
+            <img src="${getBuildImage(b)}" alt="${b.name}" onerror="this.style.display='none'; this.parentElement.textContent='⚙️'; this.parentElement.style.fontSize='2rem';" />
+          </div>
           <div class="product-name">${b.name}</div>
           <div class="product-spec">${b.description || '-'}</div>
           <div class="badge badge-success">Package</div>
@@ -1083,7 +1553,9 @@
 
       wrap.innerHTML = filtered.map(p => `
         <div class="card product-card">
-          <div class="product-image">🔧</div>
+          <div class="product-image">
+            <img src="${getPartImage(p)}" alt="${p.name}" onerror="this.style.display='none'; this.parentElement.textContent='🔧'; this.parentElement.style.fontSize='2rem';" />
+          </div>
           <div class="product-name">${p.name}</div>
           <div class="product-spec">${p.brand} ${p.model}</div>
           <div class="badge badge-primary">${p.category}</div>

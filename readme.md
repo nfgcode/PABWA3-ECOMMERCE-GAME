@@ -17,9 +17,10 @@ Platform e-commerce untuk penjualan komponen PC dan PC Build yang dilengkapi den
 
 ## Teknologi Stack
 
-- **Frontend**: HTML + CSS + JavaScript (index.php)
-- **Backend REST API**: PHP (api.php)
-- **Database**: MySQL (`database.sql`)
+- **Framework**: Laravel (`laravel-app`)
+- **Frontend**: Blade + HTML + CSS + JavaScript (`laravel-app/resources/views/storefront.blade.php`)
+- **Backend REST API**: PHP legacy bridge (`laravel-app/public/legacy-api.php`)
+- **Database**: MySQL (schema di `laravel-app/legacy-source/database.sql`)
 - **AI Engine**: Ollama lokal (`http://127.0.0.1:11434`)
 - **Payment Integration**: QRIS Code Generator
 
@@ -65,19 +66,19 @@ Jalankan Apache + MySQL.
 
 ### 2) Import Database
 
-Import file `database.sql` ke MySQL melalui phpMyAdmin atau CLI:
+Import file `laravel-app/legacy-source/database.sql` ke MySQL melalui phpMyAdmin atau CLI:
 
 ```bash
-mysql -u root -p < database.sql
+mysql -u root -p < laravel-app/legacy-source/database.sql
 ```
 
 Atau via phpMyAdmin:
 1. Buka `http://localhost/phpmyadmin`
-2. Klik **Import** → pilih `database.sql` → Execute
+2. Klik **Import** → pilih `laravel-app/legacy-source/database.sql` → Execute
 
 ### 3) Konfigurasi Database
 
-Edit `config.php` jika kredensial berbeda:
+Edit `laravel-app/public/legacy-config.php` jika kredensial berbeda:
 
 ```php
 define('DB_HOST', '127.0.0.1');    // Host MySQL
@@ -97,7 +98,7 @@ ollama pull qwen:14b
 
 Jalankan Ollama service (default berjalan di `http://127.0.0.1:11434`).
 
-Edit endpoint di `config.php` jika berbeda:
+Edit endpoint di `laravel-app/public/legacy-config.php` jika berbeda:
 
 ```php
 define('OLLAMA_URL', 'http://127.0.0.1:11434/api/generate');
@@ -105,13 +106,29 @@ define('OLLAMA_MODEL', 'qwen:14b');
 define('OLLAMA_TIMEOUT', 300);
 ```
 
-### 5) Run Aplikasi
+## Menjalankan Versi Laravel
 
-Buka browser:
+UI dari `index.php` sudah dipindahkan ke Laravel pada folder `laravel-app`.
 
+Langkah cepat:
+
+```bash
+cd laravel-app
+php artisan serve
 ```
-http://localhost/PABWA3-ECOMMERCE-GAME/index.php
+
+Lalu buka:
+
+```bash
+http://127.0.0.1:8000
 ```
+
+Catatan migrasi:
+
+- View utama: `laravel-app/resources/views/storefront.blade.php`
+- Route utama: `laravel-app/routes/web.php`
+- Endpoint API sementara (legacy): `laravel-app/public/legacy-api.php`
+- Konfigurasi DB/API legacy: `laravel-app/public/legacy-config.php`
 
 ## Database Schema
 
@@ -140,39 +157,39 @@ Database sudah terisi dengan:
 
 ### Produk & Katalog
 ```bash
-GET  /api.php?action=list_parts              # Daftar PC Parts
-GET  /api.php?action=list_builds             # Daftar PC Builds
-GET  /api.php?action=get_build&id={id}       # Detail build + komponen
-GET  /api.php?action=search_parts&q={query}  # Search parts
+GET  /legacy-api.php?action=list_parts              # Daftar PC Parts
+GET  /legacy-api.php?action=list_builds             # Daftar PC Builds
+GET  /legacy-api.php?action=get_build&id={id}       # Detail build + komponen
+GET  /legacy-api.php?action=search_parts&q={query}  # Search parts
 ```
 
 ### AI Recommendation
 ```bash
-POST /api.php?action=ai_recommend            # Rekomendasi PC via AI
-POST /api.php?action=ai_chat                 # Chat dengan AI Assistant
+POST /legacy-api.php?action=ai_recommend            # Rekomendasi PC via AI
+POST /legacy-api.php?action=ai_chat                 # Chat dengan AI Assistant
 ```
 
 ### Cart & Order
 ```bash
-POST /api.php?action=add_to_cart             # Tambah ke keranjang
-GET  /api.php?action=get_cart&user_id={id}   # Lihat cart
-POST /api.php?action=checkout                # Checkout & generate QRIS
-POST /api.php?action=clear_cart              # Kosongkan cart
+POST /legacy-api.php?action=add_to_cart             # Tambah ke keranjang
+GET  /legacy-api.php?action=get_cart&user_id={id}   # Lihat cart
+POST /legacy-api.php?action=checkout                # Checkout & generate QRIS
+POST /legacy-api.php?action=clear_cart              # Kosongkan cart
 ```
 
 ### Order Management
 ```bash
-GET  /api.php?action=list_orders&user_id={id}  # Daftar order customer
-GET  /api.php?action=order_detail&id={id}      # Detail order
-POST /api.php?action=update_order_status       # Update status (admin)
+GET  /legacy-api.php?action=list_orders&user_id={id}  # Daftar order customer
+GET  /legacy-api.php?action=order_detail&id={id}      # Detail order
+POST /legacy-api.php?action=update_order_status       # Update status (admin)
 ```
 
 ### Admin Operations
 ```bash
-POST /api.php?action=admin_add_part            # Tambah PC Part
-POST /api.php?action=admin_add_build           # Tambah PC Build
-POST /api.php?action=admin_list_orders         # Lihat semua order
-POST /api.php?action=admin_list_customers      # Lihat daftar customer
+POST /legacy-api.php?action=admin_add_part            # Tambah PC Part
+POST /legacy-api.php?action=admin_add_build           # Tambah PC Build
+POST /legacy-api.php?action=admin_list_orders         # Lihat semua order
+POST /legacy-api.php?action=admin_list_customers      # Lihat daftar customer
 ```
 
 ## User Seed Data
@@ -217,12 +234,26 @@ Selesai
 
 ```
 PABWA3-ECOMMERCE-GAME/
-├── index.php          # Frontend UI
-├── api.php            # REST API Backend
-├── config.php         # Konfigurasi DB & Ollama
-├── database.sql       # Schema & seed data
-├── package.json       # Project info
-└── readme.md          # Dokumentasi
+├── laravel-app/
+│   ├── app/
+│   ├── config/
+│   ├── database/
+│   ├── public/
+│   │   ├── assets/images/      # Aset gambar aktif
+│   │   ├── legacy-api.php      # API bridge sementara
+│   │   └── legacy-config.php   # Konfigurasi DB & Ollama bridge
+│   ├── resources/views/
+│   │   └── storefront.blade.php
+│   ├── routes/
+│   │   └── web.php
+│   └── legacy-source/
+│       ├── assets/            # Backup aset awal (non-aktif)
+│       ├── index.php           # Source lama
+│       ├── api.php             # Source lama
+│       ├── config.php          # Source lama
+│       └── database.sql        # Schema lama
+├── package.json
+└── readme.md
 ```
 
 ## Development Notes
@@ -234,16 +265,16 @@ PABWA3-ECOMMERCE-GAME/
 - 404 errors untuk undefined endpoints
 
 Selamat menggunakan PC & AI Agent E-Commerce Store! 🚀
-- `POST /api.php?action=seller_add_game`
-- `POST /api.php?action=seller_add_topup`
-- `POST /api.php?action=seller_add_requirement`
-- `GET /api.php?action=seller_requirements&seller_id={id}`
-- `POST /api.php?action=seller_agent_command`
-- `POST /api.php?action=seller_parse_prompt` (alias kompatibilitas)
-- `GET /api.php?action=seller_objects&seller_id={id}`
-- `POST /api.php?action=seller_delete_game`
-- `POST /api.php?action=seller_delete_topup`
-- `POST /api.php?action=seller_delete_requirement`
+- `POST /legacy-api.php?action=seller_add_game`
+- `POST /legacy-api.php?action=seller_add_topup`
+- `POST /legacy-api.php?action=seller_add_requirement`
+- `GET /legacy-api.php?action=seller_requirements&seller_id={id}`
+- `POST /legacy-api.php?action=seller_agent_command`
+- `POST /legacy-api.php?action=seller_parse_prompt` (alias kompatibilitas)
+- `GET /legacy-api.php?action=seller_objects&seller_id={id}`
+- `POST /legacy-api.php?action=seller_delete_game`
+- `POST /legacy-api.php?action=seller_delete_topup`
+- `POST /legacy-api.php?action=seller_delete_requirement`
 
 ## Catatan
 

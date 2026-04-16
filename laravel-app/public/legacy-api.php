@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
-include 'config.php';
+include 'legacy-config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 	sendJson(['ok' => true, 'message' => 'Preflight OK']);
@@ -34,7 +34,7 @@ try {
 
 	// List all PC parts
 	if ($action === 'list_parts') {
-		$sql = 'SELECT id, name, category, brand, model, price, stock, is_stock_empty, specifications FROM pc_parts';
+		$sql = 'SELECT id, name, category, brand, model, price, stock, is_stock_empty, image_url, specifications FROM pc_parts';
 		if ($partsHasActive) {
 			$sql .= ' WHERE is_active = 1';
 		}
@@ -50,7 +50,7 @@ try {
 
 	// List all PC builds with components
 	if ($action === 'list_builds') {
-		$sql = 'SELECT id, name, description, total_price FROM pc_builds';
+		$sql = 'SELECT id, name, description, total_price, image_url FROM pc_builds';
 		if ($buildsHasActive) {
 			$sql .= ' WHERE is_active = 1';
 		}
@@ -94,7 +94,7 @@ try {
 
 		$q = '%' . $q . '%';
 		$sql = '
-			SELECT id, name, category, brand, model, price, stock, is_stock_empty
+			SELECT id, name, category, brand, model, price, stock, is_stock_empty, image_url
 			FROM pc_parts
 			WHERE (name LIKE ? OR brand LIKE ? OR category LIKE ? OR model LIKE ?)';
 		if ($partsHasActive) {
@@ -114,7 +114,7 @@ try {
 		if (!$prompt) sendJson(['ok' => false, 'message' => 'Prompt wajib diisi'], 422);
 
 		// For now, return all parts as recommendation
-		$sql = 'SELECT id, name, category, price FROM pc_parts';
+		$sql = 'SELECT id, name, category, price, image_url FROM pc_parts';
 		if ($partsHasActive) {
 			$sql .= ' WHERE is_active = 1';
 		}
